@@ -3,18 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Login</title>
+  <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/login.js" defer></script>
 </head>
-<body>
-  <h1>Iniciar sesión</h1>
 
-  <input id="emailInput" type="email" placeholder="Correo">
-  <input id="passwordInput" type="password" placeholder="Contraseña">
+<body class="app-body">
+  <main class="mobile-shell">
+    <section class="hero-card">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow">Bienvenido</p>
+          <h1>Iniciar sesión</h1>
+        </div>
+        <div class="app-logo">⚽</div>
+      </div>
+      <p class="hero-text">Ingresa para administrar o jugar tus quinielas.</p>
+    </section>
 
-  <button id="loginButton">Entrar</button>
+    <section class="app-panel">
+      <input id="emailInput" type="email" placeholder="Correo">
+      <input id="passwordInput" type="password" placeholder="Contraseña">
 
-  <p id="mensaje"></p>
+      <button id="loginButton">Entrar</button>
+      <button onclick="window.location.href='/register.html'" class="ghost-button">Crear cuenta</button>
 
-  <a href="/register.html">Crear cuenta</a>
+      <p id="mensaje"></p>
+    </section>
+  </main>
 </body>
 </html>

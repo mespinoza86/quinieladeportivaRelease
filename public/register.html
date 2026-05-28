@@ -3,19 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>Registrarse</title>
+  <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/register.js" defer></script>
 </head>
-<body>
-  <h1>Crear cuenta</h1>
 
-  <input id="nombreInput" placeholder="Nombre">
-  <input id="emailInput" type="email" placeholder="Correo">
-  <input id="passwordInput" type="password" placeholder="Contraseña">
+<body class="app-body">
+  <main class="mobile-shell">
+    <section class="hero-card">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow">Nueva cuenta</p>
+          <h1>Registrarse</h1>
+        </div>
+        <div class="app-logo">📝</div>
+      </div>
+    </section>
 
-  <button id="registerButton">Registrarme</button>
+    <section class="app-panel">
+      <input id="nombreInput" placeholder="Nombre">
+      <input id="emailInput" type="email" placeholder="Correo">
+      <input id="passwordInput" type="password" placeholder="Contraseña">
 
-  <p id="mensaje"></p>
+      <button id="registerButton">Registrarme</button>
+      <button onclick="window.location.href='/login.html'" class="ghost-button">Ya tengo cuenta</button>
 
-  <a href="/login.html">Ya tengo cuenta</a>
+      <p id="mensaje"></p>
+    </section>
+  </main>
 </body>
 </html>

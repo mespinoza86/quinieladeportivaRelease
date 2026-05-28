@@ -3,23 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <title>Mis Quinielas</title>
+  <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/mis-quinielas.js" defer></script>
 </head>
-<body>
-  <h1>Mis Quinielas</h1>
 
-  <h2>Crear quiniela</h2>
-  <input id="nombreQuinielaInput" placeholder="Nombre de la quiniela">
-  <input id="descripcionQuinielaInput" placeholder="Descripción">
-  <button id="crearQuinielaButton">Crear</button>
+<body class="app-body">
+  <main class="mobile-shell">
+    <section class="hero-card">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow">Panel principal</p>
+          <h1>Mis Quinielas</h1>
+        </div>
+        <div class="app-logo">📋</div>
+      </div>
+    </section>
 
-  <h2>Unirme a quiniela</h2>
-  <input id="codigoInvitacionInput" placeholder="Código de invitación">
-  <button id="unirseButton">Unirme</button>
+    <section class="app-panel">
+      <h2>Crear quiniela</h2>
+      <input id="nombreQuinielaInput" placeholder="Nombre de la quiniela">
+      <input id="descripcionQuinielaInput" placeholder="Descripción">
+      <button id="crearQuinielaButton">Crear quiniela</button>
+    </section>
 
-  <h2>Lista</h2>
-  <div id="quinielasContainer"></div>
+    <section class="app-panel">
+      <h2>Unirme a quiniela</h2>
+      <input id="codigoInvitacionInput" placeholder="Código de invitación">
+      <button id="unirseButton">Unirme</button>
+    </section>
 
-  <p id="mensaje"></p>
+    <section class="app-panel">
+      <h2>Lista</h2>
+      <div id="quinielasContainer"></div>
+      <p id="mensaje"></p>
+    </section>
+  </main>
 </body>
 </html>

@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     data.forEach(item => {
       const div = document.createElement('div');
+      div.className = 'match-card';
 
       div.innerHTML = `
         <h3>${item.quiniela.nombre}</h3>

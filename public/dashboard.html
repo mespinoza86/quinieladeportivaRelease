@@ -3,37 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Quiniela</title>
+  <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/dashboard.js" defer></script>
 </head>
-<body>
-  <h1 id="tituloQuiniela">Dashboard</h1>
 
-  <p id="rolUsuario"></p>
+<body class="app-body">
+  <main class="mobile-shell">
+    <section class="hero-card">
+      <div class="hero-top">
+        <div>
+          <p class="eyebrow">Quiniela</p>
+          <h1 id="tituloQuiniela">Dashboard</h1>
+        </div>
+        <div class="app-logo">🏆</div>
+      </div>
+      <p id="rolUsuario" class="hero-text"></p>
+    </section>
 
-  <section>
-    <h2>Opciones</h2>
+    <section class="app-panel">
+      <h2>Opciones</h2>
 
-    <div id="opcionesJugador">
-      <button id="verJornadasButton">Ver jornadas</button>
-      <button id="llenarPronosticoButton">Llenar pronóstico</button>
-      <button id="verResultadosButton">Ver resultados</button>
-      <button id="tablaGeneralButton">Tabla general</button>
-    </div>
+      <div id="opcionesJugador" class="button-stack">
+        <button id="verJornadasButton">Ver jornadas</button>
+        <button id="llenarPronosticoButton">Llenar pronóstico</button>
+        <button id="verResultadosButton">Ver resultados</button>
+        <button id="tablaGeneralButton">Tabla general</button>
+      </div>
 
-    <div id="opcionesAdmin" style="display:none;">
-      <h3>Administración</h3>
-      <button id="adminJornadasButton">Administrar jornadas</button>
-      <button id="importarPartidosButton">Importar partidos desde API</button>
-      <button id="resultadosOficialesButton">Resultados oficiales</button>
-      <button id="verJugadoresButton">Ver jugadores</button>
-    </div>
-  </section>
+      <div id="opcionesAdmin" class="button-stack" style="display:none;">
+        <h3>Administración</h3>
+        <button id="adminJornadasButton">Administrar jornadas</button>
+        <button id="importarPartidosButton">Importar partidos desde API</button>
+        <button id="resultadosOficialesButton">Resultados oficiales</button>
+        <button id="verJugadoresButton">Ver jugadores</button>
+      </div>
 
-  <hr>
-
-  <button id="misQuinielasButton">Volver a Mis Quinielas</button>
-  <button id="logoutButton">Cerrar sesión</button>
-
-  <p id="mensaje"></p>
+      <button id="misQuinielasButton" class="secondary-button">Volver a Mis Quinielas</button>
+      <button id="logoutButton" class="ghost-button">Cerrar sesión</button>
+      <p id="mensaje"></p>
+    </section>
+  </main>
 </body>
 </html>
