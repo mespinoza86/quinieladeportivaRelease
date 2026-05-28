@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Importar Partidos</title>
+  <script src="/importar-partidos.js" defer></script>
+</head>
+<body>
+
+  <h1 id="titulo">Importar Partidos desde API</h1>
+
+  <section>
+    <h2>Buscar partidos</h2>
+
+    <label>Fecha</label>
+    <input type="date" id="fechaInput">
+
+    <label>Torneo</label>
+    <select id="torneoSelect">
+      <option value="">Todos los torneos</option>
+
+      <optgroup label="Clubes">
+        <option value="country=Mexico;league_exact=Liga MX">México - Liga MX</option>
+        <option value="country=Costa Rica;league_exact=Primera Division">Costa Rica - Primera División</option>
+        <option value="country=Costa Rica;league_exact=Liga de Ascenso">Costa Rica - Segunda División</option>
+        <option value="country=Honduras;league_exact=Liga Nacional">Honduras - Liga Nacional</option>
+        <option value="country=El Salvador;league_exact=Primera División">El Salvador - Primera División</option>
+        <option value="country=Panama;league_exact=LPF">Panamá - LPF</option>
+        <option value="country=Guatemala;league_exact=Liga Nacional">Guatemala - Liga Nacional</option>
+        <option value="country=Argentina;league_exact=Liga Profesional">Argentina - Liga Profesional</option>
+        <option value="country=Brazil;league_exact=Serie A">Brasil - Serie A</option>
+        <option value="country=USA;league_exact=Major League Soccer">MLS</option>
+        <option value="league_exact=UEFA Champions League">UEFA Champions League</option>
+        <option value="league_exact=UEFA Europa League">UEFA Europa League</option>
+        <option value="league_exact=CONMEBOL Libertadores">CONMEBOL Libertadores</option>
+        <option value="league_exact=CONMEBOL Sudamericana">CONMEBOL Sudamericana</option>
+        <option value="league_contains=CONCACAF">CONCACAF</option>
+      </optgroup>
+
+      <optgroup label="Selecciones">
+        <option value="league_any=World Cup|FIFA World Cup|Copa del Mundo">Mundial FIFA</option>
+        <option value="league_any=World Cup Qualification|WC Qualification|World Cup Qualifying">Eliminatorias Mundialistas</option>
+        <option value="league_any=CONCACAF Gold Cup|Gold Cup">Copa Oro</option>
+        <option value="league_any=CONCACAF Nations League">CONCACAF Nations League</option>
+        <option value="league_any=Copa America|CONMEBOL Copa America">Copa América</option>
+        <option value="league_any=Friendly|Friendlies|International Friendlies">Amistosos internacionales</option>
+      </optgroup>
+
+      <option value="custom">Buscar por texto</option>
+    </select>
+
+    <div id="customLeagueBox" style="display:none;">
+      <input id="customLeagueNameInput" placeholder="Texto del torneo">
+    </div>
+
+    <button id="buscarPartidosButton">Buscar partidos</button>
+
+    <p id="estadoBusqueda"></p>
+
+    <div id="partidosContainer"></div>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Crear jornada</h2>
+
+    <input id="nombreJornadaInput" placeholder="Nombre de jornada">
+
+    <label>Fecha de cierre</label>
+    <input type="date" id="fechaCierreInput">
+
+    <label>Hora de cierre</label>
+    <input type="time" id="horaCierreInput">
+
+    <div id="partidosPreliminaresContainer"></div>
+
+    <button id="crearJornadaButton">Crear jornada desde API</button>
+  </section>
+
+  <hr>
+
+  <button onclick="window.location.href='/dashboard.html'">Volver</button>
+
+</body>
+</html>

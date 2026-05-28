@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Quiniela</title>
+  <script src="/dashboard.js" defer></script>
+</head>
+<body>
+  <h1 id="tituloQuiniela">Dashboard</h1>
+
+  <p id="rolUsuario"></p>
+
+  <section>
+    <h2>Opciones</h2>
+
+    <div id="opcionesJugador">
+      <button id="verJornadasButton">Ver jornadas</button>
+      <button id="llenarPronosticoButton">Llenar pronóstico</button>
+      <button id="verResultadosButton">Ver resultados</button>
+      <button id="tablaGeneralButton">Tabla general</button>
+    </div>
+
+    <div id="opcionesAdmin" style="display:none;">
+      <h3>Administración</h3>
+      <button id="adminJornadasButton">Administrar jornadas</button>
+      <button id="importarPartidosButton">Importar partidos desde API</button>
+      <button id="resultadosOficialesButton">Resultados oficiales</button>
+      <button id="verJugadoresButton">Ver jugadores</button>
+    </div>
+  </section>
+
+  <hr>
+
+  <button id="misQuinielasButton">Volver a Mis Quinielas</button>
+  <button id="logoutButton">Cerrar sesión</button>
+
+  <p id="mensaje"></p>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Administrar Jornadas</title>
+  <script src="/admin-jornadas.js" defer></script>
+</head>
+<body>
+  <h1 id="titulo">Administrar Jornadas</h1>
+
+  <section>
+    <h2>Nueva jornada</h2>
+
+    <input id="nombreJornadaInput" placeholder="Nombre de jornada">
+
+    <h3>Agregar partido</h3>
+
+        <input id="equipo1Input" placeholder="Equipo 1">
+        <input id="logoEquipo1Input" placeholder="URL logo equipo 1">
+
+        <input id="equipo2Input" placeholder="Equipo 2">
+        <input id="logoEquipo2Input" placeholder="URL logo equipo 2">
+
+
+    <label>
+      <input type="checkbox" id="comodinInput">
+      Comodín
+    </label>
+
+    <button id="agregarPartidoButton">Agregar partido</button>
+
+    <ul id="partidosTemporalesList"></ul>
+
+    <h3>Cierre</h3>
+    <input type="date" id="fechaCierreInput">
+    <input type="time" id="horaCierreInput">
+
+    <button id="guardarJornadaButton">Guardar jornada</button>
+  </section>
+
+  <hr>
+
+  <section>
+    <h2>Jornadas existentes</h2>
+    <div id="jornadasContainer"></div>
+  </section>
+
+  <hr>
+
+  <button onclick="window.location.href='/dashboard.html'">Volver</button>
+
+  <p id="mensaje"></p>
+</body>
+</html>

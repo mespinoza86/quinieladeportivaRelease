@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Resultados Oficiales</title>
+  <script src="/admin-resultados-oficiales.js" defer></script>
+</head>
+<body>
+
+  <h1 id="titulo">Resultados Oficiales</h1>
+
+  <label>Jornada</label>
+  <select id="jornadaSelect"></select>
+
+  <button id="cargarGuardadosButton">Cargar guardados</button>
+  <button id="actualizarApiButton">Actualizar desde API</button>
+
+  <div id="partidosContainer"></div>
+
+  <button id="guardarButton">Guardar resultados oficiales</button>
+
+  <hr>
+
+  <button onclick="window.location.href='/dashboard.html'">Volver</button>
+
+  <p id="mensaje"></p>
+
+</body>
+</html>
