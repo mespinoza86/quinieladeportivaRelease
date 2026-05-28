@@ -3,45 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <title>Dashboard Quiniela</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/dashboard.js" defer></script>
 </head>
 
 <body class="app-body">
+
   <main class="mobile-shell">
+
     <section class="hero-card">
       <div class="hero-top">
         <div>
           <p class="eyebrow">Quiniela</p>
           <h1 id="tituloQuiniela">Dashboard</h1>
         </div>
-        <div class="app-logo">🏆</div>
+
+        <div class="app-logo">⚽</div>
       </div>
+
       <p id="rolUsuario" class="hero-text"></p>
     </section>
 
     <section class="app-panel">
       <h2>Opciones</h2>
 
-      <div id="opcionesJugador" class="button-stack">
-        <button id="verJornadasButton">Ver jornadas</button>
-        <button id="llenarPronosticoButton">Llenar pronóstico</button>
-        <button id="verResultadosButton">Ver resultados</button>
-        <button id="tablaGeneralButton">Tabla general</button>
-      </div>
+      <div id="opcionesJugador" class="card-list">
+        <button id="verJornadasButton" class="action-card">
+          <span class="action-icon">📅</span>
+          <span class="action-content">
+            <span class="action-title">Jornadas</span>
+            <span class="action-subtitle">Ver partidos disponibles</span>
+          </span>
+        </button>
 
-      <div id="opcionesAdmin" class="button-stack" style="display:none;">
-        <h3>Administración</h3>
-        <button id="adminJornadasButton">Administrar jornadas</button>
-        <button id="importarPartidosButton">Importar partidos desde API</button>
-        <button id="resultadosOficialesButton">Resultados oficiales</button>
-        <button id="verJugadoresButton">Ver jugadores</button>
-      </div>
+        <button id="llenarPronosticoButton" class="action-card primary">
+          <span class="action-icon">📝</span>
+          <span class="action-content">
+            <span class="action-title">Llenar pronóstico</span>
+            <span class="action-subtitle">Registrar tus marcadores</span>
+          </span>
+        </button>
 
+        <button id="verResultadosButton" class="action-card">
+          <span class="action-icon">🎯</span>
+          <span class="action-content">
+            <span class="action-title">Ver resultados</span>
+            <span class="action-subtitle">Pronósticos por jugador</span>
+          </span>
+        </button>
+
+        <button id="tablaGeneralButton" class="action-card">
+          <span class="action-icon">🏆</span>
+          <span class="action-content">
+            <span class="action-title">Tabla general</span>
+            <span class="action-subtitle">Puntos acumulados</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section id="opcionesAdmin" class="app-panel" style="display:none;">
+      <h2>Administración</h2>
+
+      <div class="card-list">
+        <button id="adminJornadasButton" class="action-card">
+          <span class="action-icon">🛠️</span>
+          <span class="action-content">
+            <span class="action-title">Administrar jornadas</span>
+            <span class="action-subtitle">Crear, editar o eliminar jornadas</span>
+          </span>
+        </button>
+
+        <button id="importarPartidosButton" class="action-card">
+          <span class="action-icon">🌐</span>
+          <span class="action-content">
+            <span class="action-title">Importar partidos desde API</span>
+            <span class="action-subtitle">Traer partidos, logos y datos externos</span>
+          </span>
+        </button>
+
+        <button id="resultadosOficialesButton" class="action-card">
+          <span class="action-icon">✅</span>
+          <span class="action-content">
+            <span class="action-title">Resultados oficiales</span>
+            <span class="action-subtitle">Registrar marcadores reales</span>
+          </span>
+        </button>
+
+        <button id="verJugadoresButton" class="action-card">
+          <span class="action-icon">👥</span>
+          <span class="action-content">
+            <span class="action-title">Ver jugadores</span>
+            <span class="action-subtitle">Administrar miembros y roles</span>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <section class="app-panel">
       <button id="misQuinielasButton" class="secondary-button">Volver a Mis Quinielas</button>
       <button id="logoutButton" class="ghost-button">Cerrar sesión</button>
       <p id="mensaje"></p>
     </section>
+
   </main>
+
+  <nav class="bottom-nav">
+    <a href="/dashboard.html" class="active">🏠<span>Inicio</span></a>
+    <a href="/ver-jornadas.html">📅<span>Jornadas</span></a>
+    <a href="/tabla-general.html">🏆<span>Tabla</span></a>
+  </nav>
+
 </body>
 </html>
