@@ -288,10 +288,13 @@ app.post('/api/auth/register', async (req, res) => {
     });
 
 
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error registrando usuario' });
-  }
+    } catch (error) {
+      console.error('Error registrando usuario:', error);
+
+      res.status(500).json({
+        error: error.message || 'Error registrando usuario'
+      });
+    }
 });
 
 app.get('/api/auth/verify/:token', async (req, res) => {
