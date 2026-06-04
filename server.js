@@ -11,9 +11,18 @@ const PORT = process.env.PORT || 3000;
 const SALT_ROUNDS = 10;
 const axios = require('axios');
 const path = require('path');
+const { OAuth2Client } = require('google-auth-library');
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'https://quinieladeportivarelease.onrender.com'
+  ],
+  credentials: true
+}));
+
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -26,12 +35,18 @@ app.get('/js/:filename', (req, res) => {
   res.sendFile(path.join(__dirname, 'private', req.params.filename));
 });
 
+app.set('trust proxy', 1);
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'quiniela_v2_secret',
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  }
 }));
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB'))
@@ -53,7 +68,9 @@ const apiFootballCom = axios.create({
 const UserSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
-  passwordHash: { type: String, required: true },
+  passwordHash: { type: String },
+  googleId: String,
+  authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
   emailVerificado: { type: Boolean, default: false },
   verificationToken: String
 }, { timestamps: true });
@@ -388,6 +405,65 @@ function marcador90Minutos(fixture) {
   };
 }
 
+app.post('/api/auth/google', async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({ error: 'Falta credential de Google' });
+    }
+
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+
+    const googleId = payload.sub;
+    const email = payload.email?.toLowerCase();
+    const nombre = payload.name || payload.email;
+    const emailVerificado = !!payload.email_verified;
+
+    if (!email) {
+      return res.status(400).json({ error: 'Google no devolvió correo' });
+    }
+
+    let user = await User.findOne({ email });
+
+    if (!user) {
+      user = await User.create({
+        nombre,
+        email,
+        googleId,
+        authProvider: 'google',
+        emailVerificado,
+        passwordHash: ''
+      });
+    } else {
+      user.googleId = user.googleId || googleId;
+      user.authProvider = user.authProvider || 'google';
+      user.emailVerificado = user.emailVerificado || emailVerificado;
+      await user.save();
+    }
+
+    req.session.userId = user._id.toString();
+
+    res.json({
+      success: true,
+      user: {
+        id: user._id,
+        nombre: user.nombre,
+        email: user.email,
+        emailVerificado: user.emailVerificado
+      }
+    });
+
+  } catch (error) {
+    console.error('Error login Google:', error);
+    res.status(401).json({ error: 'No se pudo iniciar sesión con Google' });
+  }
+});
 
 app.get('/api/football/fixtures', requireAuth, async (req, res) => {
   try {
