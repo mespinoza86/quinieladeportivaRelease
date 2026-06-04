@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mensaje.textContent = data.error || 'Error registrando usuario';
       return;
     }
-
-    mensaje.textContent = 'Cuenta creada. Ahora puedes iniciar sesión.';
+    
+    mensaje.textContent = 'Cuenta creada. Revisa tu correo para activar la cuenta antes de iniciar sesión.';
   });
 });
