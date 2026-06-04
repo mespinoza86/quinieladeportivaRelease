@@ -19,7 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = await res.json();
 
     if (!res.ok) {
-      mensaje.textContent = data.error || 'Error registrando usuario';
+      } catch (error) {
+        console.error('Error registrando usuario:', error);
+
+          res.status(500).json({
+          error: error.message || 'Error registrando usuario'
+      });
+    } 
       return;
     }
     
