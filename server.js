@@ -20,7 +20,6 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
 
 
-
 app.use(cors({
   origin: [
     'http://localhost:3000',
@@ -269,6 +268,7 @@ app.post('/api/auth/register', async (req, res) => {
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
     const verificationToken = crypto.randomBytes(32).toString('hex');
     
+    /*
     const user = await User.create({
       nombre,
       email: email.toLowerCase(),
@@ -286,6 +286,34 @@ app.post('/api/auth/register', async (req, res) => {
       success: true,
       message: 'Usuario registrado. Revisa tu correo para activar la cuenta.'
     });
+
+*/
+
+const requiereVerificacion = process.env.REQUIRE_EMAIL_VERIFICATION === 'true';
+
+const user = await User.create({
+  nombre,
+  email: email.toLowerCase(),
+  passwordHash,
+  emailVerificado: !requiereVerificacion,
+  verificationToken: requiereVerificacion ? verificationToken : ''
+});
+
+if (requiereVerificacion) {
+  await enviarCorreoVerificacion(user);
+
+  return res.json({
+    success: true,
+    message: 'Usuario registrado. Revisa tu correo para activar la cuenta.'
+  });
+}
+
+res.json({
+  success: true,
+  message: 'Usuario registrado. Ya puedes iniciar sesión.'
+});
+
+
 
 
     } catch (error) {
@@ -346,12 +374,22 @@ app.post('/api/auth/login', async (req, res) => {
   if (!match) {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
-
+/*
   if (!user.emailVerificado) {
     return res.status(403).json({
       error: 'Debes verificar tu correo antes de iniciar sesión.'
     });
   }
+*/
+
+  if (process.env.REQUIRE_EMAIL_VERIFICATION === 'true' && !user.emailVerificado) {
+    return res.status(403).json({
+      error: 'Debes verificar tu correo antes de iniciar sesión.'
+    });
+  }
+
+
+
 
   req.session.userId = user._id.toString();
 
