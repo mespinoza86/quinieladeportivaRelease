@@ -26,27 +26,3 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = '/mis-quinielas.html';
   });
 });
-
-
-window.handleGoogleCredential = async function(response) {
-  const mensaje = document.getElementById('mensaje');
-
-  const res = await fetch('/api/auth/google', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify({
-      credential: response.credential
-    })
-  });
-
-  const data = await res.json();
-
-  if (!res.ok) {
-    mensaje.textContent = data.error || 'Error iniciando sesión con Google';
-    return;
-  }
-
-  localStorage.setItem('user', JSON.stringify(data.user));
-  window.location.href = '/mis-quinielas.html';
-};

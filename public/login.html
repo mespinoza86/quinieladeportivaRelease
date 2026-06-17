@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Login</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
   <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/login.js" defer></script>
 </head>
@@ -27,28 +26,6 @@
       <input id="passwordInput" type="password" placeholder="Contraseña">
 
       <button id="loginButton">Entrar</button>
-
-      <div class="divider"></div>
-
-      <div
-        id="g_id_onload"        
-        data-client_id="331887333817-0g0ni6nthbc530aaf9q7dctqhi1uknrp.apps.googleusercontent.com"                        
-        data-callback="handleGoogleCredential"
-        data-auto_prompt="false">
-      </div>
-
-      <div
-        class="g_id_signin"
-        data-type="standard"
-        data-size="large"
-        data-theme="outline"
-        data-text="signin_with"
-        data-shape="pill"
-        data-logo_alignment="left">
-      </div>
-
-
-
       <button onclick="window.location.href='/register.html'" class="ghost-button">Crear cuenta</button>
 
       <p id="mensaje"></p>

@@ -11,23 +11,9 @@ const PORT = process.env.PORT || 3000;
 const SALT_ROUNDS = 10;
 const axios = require('axios');
 const path = require('path');
-const { OAuth2Client } = require('google-auth-library');
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
-const nodemailer = require('nodemailer');
-const { Resend } = require('resend');
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-const APP_URL = process.env.APP_URL || 'http://localhost:3000';
 
 
-app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://quinieladeportivarelease.onrender.com'
-  ],
-  credentials: true
-}));
-
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,81 +26,12 @@ app.get('/js/:filename', (req, res) => {
   res.sendFile(path.join(__dirname, 'private', req.params.filename));
 });
 
-app.set('trust proxy', 1);
 
 app.use(session({
   secret: process.env.SESSION_SECRET || 'quiniela_v2_secret',
   resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
-  }
+  saveUninitialized: false
 }));
-
-
-
-const mailTransporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS
-  }
-});
-
-/*
-async function enviarCorreoVerificacion(user) {
-  const verificationUrl = `${APP_URL}/api/auth/verify/${user.verificationToken}`;
-
-  await mailTransporter.sendMail({
-    from: `"Quiniela Deportiva" <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: 'Verifica tu cuenta - Quiniela Deportiva',
-    html: `
-      <h2>Hola ${user.nombre}</h2>
-      <p>Gracias por registrarte en Quiniela Deportiva.</p>
-      <p>Para activar tu cuenta, haz clic en este botón:</p>
-      <p>
-        <a href="${verificationUrl}" style="background:#20d35b;color:#fff;padding:12px 18px;border-radius:8px;text-decoration:none;">
-          Verificar cuenta
-        </a>
-      </p>
-      <p>Si el botón no funciona, copia este enlace:</p>
-      <p>${verificationUrl}</p>
-    `
-  });
-}
-*/
-
-async function enviarCorreoVerificacion(user) {
-  const verificationUrl = `${APP_URL}/api/auth/verify/${user.verificationToken}`;
-
-  const { data, error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM || 'Quiniela Deportiva <onboarding@resend.dev>',
-    to: [user.email],
-    subject: 'Verifica tu cuenta - Quiniela Deportiva',
-    html: `
-      <h2>Hola ${user.nombre}</h2>
-      <p>Gracias por registrarte en Quiniela Deportiva.</p>
-      <p>Para activar tu cuenta, haz clic aquí:</p>
-      <p>
-        <a href="${verificationUrl}">
-          Verificar cuenta
-        </a>
-      </p>
-      <p>Si el enlace no funciona, copia este link:</p>
-      <p>${verificationUrl}</p>
-    `
-  });
-
-  if (error) {
-    console.error('Error enviando correo:', error);
-    throw new Error('No se pudo enviar el correo de verificación');
-  }
-
-  return data;
-}
-
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('✅ Conectado a MongoDB'))
@@ -136,9 +53,7 @@ const apiFootballCom = axios.create({
 const UserSchema = new mongoose.Schema({
   nombre: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
-  passwordHash: { type: String },
-  googleId: String,
-  authProvider: { type: String, enum: ['local', 'google'], default: 'local' },
+  passwordHash: { type: String, required: true },
   emailVerificado: { type: Boolean, default: false },
   verificationToken: String
 }, { timestamps: true });
@@ -267,91 +182,42 @@ app.post('/api/auth/register', async (req, res) => {
 
     const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
     const verificationToken = crypto.randomBytes(32).toString('hex');
-    
-    /*
+
     const user = await User.create({
       nombre,
       email: email.toLowerCase(),
       passwordHash,
-      emailVerificado: false,
       verificationToken
     });
 
-
-
     // Más adelante aquí enviamos correo real.
-    await enviarCorreoVerificacion(user);
+    console.log(`Token de verificación para ${email}: ${verificationToken}`);
 
     res.json({
       success: true,
-      message: 'Usuario registrado. Revisa tu correo para activar la cuenta.'
+      message: 'Usuario registrado. Falta implementar envío de correo.',
+      verificationTokenDev: verificationToken
     });
 
-*/
-
-const requiereVerificacion = process.env.REQUIRE_EMAIL_VERIFICATION === 'true';
-
-const user = await User.create({
-  nombre,
-  email: email.toLowerCase(),
-  passwordHash,
-  emailVerificado: !requiereVerificacion,
-  verificationToken: requiereVerificacion ? verificationToken : ''
-});
-
-if (requiereVerificacion) {
-  await enviarCorreoVerificacion(user);
-
-  return res.json({
-    success: true,
-    message: 'Usuario registrado. Revisa tu correo para activar la cuenta.'
-  });
-}
-
-res.json({
-  success: true,
-  message: 'Usuario registrado. Ya puedes iniciar sesión.'
-});
-
-
-
-
-    } catch (error) {
-      console.error('Error registrando usuario:', error);
-
-      res.status(500).json({
-        error: error.message || 'Error registrando usuario'
-      });
-    }
-});
-
-app.get('/api/auth/verify/:token', async (req, res) => {
-  try {
-    const user = await User.findOne({ verificationToken: req.params.token });
-
-    if (!user) {
-      return res.status(400).send(`
-        <h1>Token inválido</h1>
-        <p>El enlace de verificación no es válido o ya fue usado.</p>
-      `);
-    }
-
-    user.emailVerificado = true;
-    user.verificationToken = '';
-    await user.save();
-
-    res.send(`
-      <h1>Cuenta verificada correctamente</h1>
-      <p>Ya puedes iniciar sesión.</p>
-      <a href="/login.html">Ir al login</a>
-    `);
-
   } catch (error) {
-    console.error('Error verificando correo:', error);
-    res.status(500).send('Error verificando correo');
+    console.error(error);
+    res.status(500).json({ error: 'Error registrando usuario' });
   }
 });
 
+app.get('/api/auth/verify/:token', async (req, res) => {
+  const user = await User.findOne({ verificationToken: req.params.token });
+
+  if (!user) {
+    return res.status(400).json({ error: 'Token inválido' });
+  }
+
+  user.emailVerificado = true;
+  user.verificationToken = '';
+  await user.save();
+
+  res.json({ success: true, message: 'Correo verificado correctamente' });
+});
 
 app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
@@ -362,34 +228,11 @@ app.post('/api/auth/login', async (req, res) => {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
 
-  if (!user.passwordHash) {
-    return res.status(401).json({
-      error: 'Esta cuenta fue creada con Google. Inicia sesión con Google.'
-    });
-  }
-
   const match = await bcrypt.compare(password, user.passwordHash);
-
 
   if (!match) {
     return res.status(401).json({ error: 'Credenciales incorrectas' });
   }
-/*
-  if (!user.emailVerificado) {
-    return res.status(403).json({
-      error: 'Debes verificar tu correo antes de iniciar sesión.'
-    });
-  }
-*/
-
-  if (process.env.REQUIRE_EMAIL_VERIFICATION === 'true' && !user.emailVerificado) {
-    return res.status(403).json({
-      error: 'Debes verificar tu correo antes de iniciar sesión.'
-    });
-  }
-
-
-
 
   req.session.userId = user._id.toString();
 
@@ -545,65 +388,6 @@ function marcador90Minutos(fixture) {
   };
 }
 
-app.post('/api/auth/google', async (req, res) => {
-  try {
-    const { credential } = req.body;
-
-    if (!credential) {
-      return res.status(400).json({ error: 'Falta credential de Google' });
-    }
-
-    const ticket = await googleClient.verifyIdToken({
-      idToken: credential,
-      audience: process.env.GOOGLE_CLIENT_ID
-    });
-
-    const payload = ticket.getPayload();
-
-    const googleId = payload.sub;
-    const email = payload.email?.toLowerCase();
-    const nombre = payload.name || payload.email;
-    const emailVerificado = !!payload.email_verified;
-
-    if (!email) {
-      return res.status(400).json({ error: 'Google no devolvió correo' });
-    }
-
-    let user = await User.findOne({ email });
-
-    if (!user) {
-      user = await User.create({
-        nombre,
-        email,
-        googleId,
-        authProvider: 'google',
-        emailVerificado,
-        passwordHash: ''
-      });
-    } else {
-      user.googleId = user.googleId || googleId;
-      user.authProvider = user.authProvider || 'google';
-      user.emailVerificado = user.emailVerificado || emailVerificado;
-      await user.save();
-    }
-
-    req.session.userId = user._id.toString();
-
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        nombre: user.nombre,
-        email: user.email,
-        emailVerificado: user.emailVerificado
-      }
-    });
-
-  } catch (error) {
-    console.error('Error login Google:', error);
-    res.status(401).json({ error: 'No se pudo iniciar sesión con Google' });
-  }
-});
 
 app.get('/api/football/fixtures', requireAuth, async (req, res) => {
   try {
